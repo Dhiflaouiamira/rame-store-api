@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const emailRoutes = require('./routes/emailRoutes');
 const Email = require('./models/Email'); // Import the Email model
+const contact = require('./routes/contact');
 
 const app = express();
 app.use(express.json());
@@ -37,6 +38,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
+app.use('/api/contact', contact);
+
 
 async function notifyUsers() {
     try {

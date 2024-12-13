@@ -43,28 +43,41 @@ router.post('/', async (req, res) => {
     // Check if the email is already registered
     const existingEmail = await Email.findOne({ email });
     if (existingEmail) {
-      return res.status(400).json({ message: 'You are already subscribed' });  // Changed response message
+      return res.status(400).json({ message: 'You are already subscribed' });
     }
+
+    // Extract the user's name from the email
+    const userName = email.split('@')[0];
 
     // Register the new email
     const newEmail = new Email({ email });
     await newEmail.save();
 
-    // Send the welcome email using the updated subject and body
-    const subject = 'Welcome to RAME Store';
+    // Send the welcome email with the updated content
+    const subject = 'Welcome to RAME STORE – Let’s Get Started with 10% Off!';
     const text = `
-      Dear ${email},
+      Welcome to RAME STORE – Let’s Get Started with 10% Off!
+      
+      Dear ${userName},
+      
+      Welcome to the RAME STORE! We’re thrilled to have you on our mailing list and look forward to providing you with the best in music and collectibles.
 
-      Welcome to RAME Store! We’re excited to have you join our community of passionate DJs and music enthusiasts.
+      As a token of our appreciation, enjoy 10% off your first purchase with us.
+      
+      You will be notified of our:
+      
+      - Upcoming Products and Pop Up Shops: Be the first to know about our new and exclusive products dropping soon and updates about our Pop Up shops.
+      
+      - In-Stock Records: Browse through our wide selection of records, including classics and contemporary hits, all ready to ship.
+      
+      Stay tuned for updates, special offers, and handpicked recommendations tailored just for you.
 
-      At RAME Store, we specialize in everything related to DJ gear and accessories, from top-of-the-line turntables and mixers to the latest audio equipment and lighting solutions. Our mission is to support your music journey with high-quality products and exclusive deals.
-
-      By joining us, you’ll receive an amazing discount on our products, delivered right to your inbox. Stay tuned for more updates, exclusive offers, and the latest in DJ technology!
-
-      Thank you for pre-registering. We can’t wait to help elevate your music experience.
-
-      Best regards,
-      The RAME Store Team
+      If you have any questions or need assistance, feel free to reach out to us at:
+      - Phone: +216 29 050 348
+      - Email: contact@ramestore.com
+      
+      Happy shopping,
+      The RAME STORE Team
     `;
 
     sendEmail({ recipient_email: email, subject, text })
